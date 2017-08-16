@@ -37,11 +37,11 @@ grad = zeros(size(theta));
 %
 
 
+theta_row1_equal_zero = [0; theta(2:length(theta))];
 
+J = (-y' * log(sigmoid(X * theta)) - (1 - y') * log(1 - sigmoid(X * theta))) / m + theta_row1_equal_zero' * theta_row1_equal_zero * lambda / m / 2.;
 
-
-
-
+grad = X' * (sigmoid(X * theta) - y) / m + theta_row1_equal_zero * lambda / m;
 
 
 
