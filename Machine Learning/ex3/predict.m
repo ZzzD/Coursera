@@ -20,9 +20,15 @@ p = zeros(size(X, 1), 1);
 %       information see 'help max'. If your examples are in rows, then, you
 %       can use max(A, [], 2) to obtain the max for each row.
 %
+X = [ones(m, 1) X];
 
+layer2_1_to_m = sigmoid(Theta1 * X'); %j列为样本j的layer 2输入值
 
+layer2_1_to_m = [ones(1, m); layer2_1_to_m];
 
+layer3_1_to_m = sigmoid(Theta2 * layer2_1_to_m)'; %j行为样本j的layer 3输出值
+
+[ma, p] = max(layer3_1_to_m, [], 2);
 
 
 
