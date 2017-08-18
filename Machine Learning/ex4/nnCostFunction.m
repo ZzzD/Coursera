@@ -63,17 +63,19 @@ Theta2_grad = zeros(size(Theta2));
 %
 
 X = [ones(m, 1) X];
-h_x1 = sigmoid(X * Theta1');
+z2 = X * Theta1';
+% z2 = [ones(m, 1) z2];
+a_2 = sigmoid(z2);
 
-h_x1 = [ones(m, 1) h_x1];
+a_2 = [ones(m, 1) a_2];
 
-h_x = sigmoid(h_x1 * Theta2');
+a_3 = sigmoid(a_2 * Theta2');
 
 eye_matrix = eye(num_labels);
 y_label = eye_matrix(y,:);
 
 % Vectorization for cost functon J
-total_cost = (-y_label .* log(h_x) - (1 - y_label) .* log(1 - h_x)) / m;
+total_cost = (-y_label .* log(a_3) - (1 - y_label) .* log(1 - a_3)) / m;
 
 Theta1_no_bias = [zeros(size(Theta1, 1), 1) Theta1(:, 2:end)];
 Theta2_no_bias = [zeros(size(Theta2, 1), 1) Theta2(:, 2:end)];
@@ -82,19 +84,22 @@ bItem = (sum(sum(Theta1_no_bias .^ 2), 2) + sum(sum(Theta2_no_bias .^ 2), 2)) * 
 
 J = sum(sum(total_cost, 2)) + bItem;
 
-tr_2 = zeros(num_labels, hidden_layer_size + 1);
-tr_1 = zeros(hidden_layer_size, input_layer_size + 1);
+delta_1 = zeros(size(Theta1));
+delta_2 = zeros(size(Theta2));
+d3 = a_3 - y_label; % m * k
+d2 = d3 * Theta2(:,2:end) .* sigmoidGradient(z2); % m * h
 for j=1:m,
-	delta_3 = h_x(m, :)' - y_label(m, :)';
-	delta_2 = Theta2' * delta_3 .* h_x1(m, :)' .* (1 - h_x1(m, :)');
-	tr_2 = tr_2 + delta_3 * h_x1(m, :);
-	tr_1 = tr_1 + delta_2(2:end) * X(m, :);
+	delta_1 = delta_1 + d2(j, :)' * X(j, :);
+	delta_2 = delta_2 + d3(j, :)' * a_2(j, :);
 end
 
 
-Theta1_grad = tr_1 / m + lambda * Theta1_no_bias;
+% Theta1_grad = tr_1 / m + lambda * Theta1_no_bias;
+Theta1_grad = delta_1 / m;
 
-Theta2_grad = tr_2 / m + lambda * Theta2_no_bias;
+% Theta2_grad = tr_2 / m + lambda * Theta2_no_bias;
+Theta2_grad = delta_2 / m;
+
 
 % -------------------------------------------------------------
 
