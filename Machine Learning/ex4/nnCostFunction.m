@@ -75,9 +75,12 @@ y_label = eye_matrix(y,:);
 % Vectorization for cost functon J
 total_cost = (-y_label .* log(h_x) - (1 - y_label) .* log(1 - h_x)) / m;
 
-bItem = sum(sum(Theta1 .^ 2), 2) + sum(sum(Theta2 .^ 2), 2) * lambda / m / 2;
+Theta1_no_bias = [zeros(size(Theta1, 1), 1) Theta1(:, 2:end)];
+Theta2_no_bias = [zeros(size(Theta2, 1), 1) Theta2(:, 2:end)];
 
-J = sum(sum(total_cost, 2));
+bItem = (sum(sum(Theta1_no_bias .^ 2), 2) + sum(sum(Theta2_no_bias .^ 2), 2)) * lambda / m / 2;
+
+J = sum(sum(total_cost, 2)) + bItem;
 
 tr_2 = zeros(num_labels, hidden_layer_size + 1);
 tr_1 = zeros(hidden_layer_size, input_layer_size + 1);
@@ -88,8 +91,6 @@ for j=1:m,
 	tr_1 = tr_1 + delta_2(2:end) * X(m, :);
 end
 
-Theta1_no_bias = [zeros(size(Theta1, 1), 1) Theta1(:, 2:end)];
-Theta2_no_bias = [zeros(size(Theta2, 1), 1) Theta2(:, 2:end)];
 
 Theta1_grad = tr_1 / m + lambda * Theta1_no_bias;
 
