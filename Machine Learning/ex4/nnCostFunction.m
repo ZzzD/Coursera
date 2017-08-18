@@ -62,23 +62,38 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+X = [ones(m, 1) X];
+h_x1 = sigmoid(X * Theta1');
 
+h_x1 = [ones(m, 1) h_x1];
 
+h_x = sigmoid(h_x1 * Theta2');
 
+eye_matrix = eye(num_labels);
+y_label = eye_matrix(y,:);
 
+% Vectorization for cost functon J
+total_cost = (-y_label .* log(h_x) - (1 - y_label) .* log(1 - h_x)) / m;
 
+bItem = sum(sum(Theta1 .^ 2), 2) + sum(sum(Theta2 .^ 2), 2) * lambda / m / 2;
 
+J = sum(sum(total_cost, 2));
 
+tr_2 = zeros(num_labels, hidden_layer_size + 1);
+tr_1 = zeros(hidden_layer_size, input_layer_size + 1);
+for j=1:m,
+	delta_3 = h_x(m, :)' - y_label(m, :)';
+	delta_2 = Theta2' * delta_3 .* h_x1(m, :)' .* (1 - h_x1(m, :)');
+	tr_2 = tr_2 + delta_3 * h_x1(m, :);
+	tr_1 = tr_1 + delta_2(2:end) * X(m, :);
+end
 
+Theta1_no_bias = [zeros(size(Theta1, 1), 1) Theta1(:, 2:end)];
+Theta2_no_bias = [zeros(size(Theta2, 1), 1) Theta2(:, 2:end)];
 
+Theta1_grad = tr_1 / m + lambda * Theta1_no_bias;
 
-
-
-
-
-
-
-
+Theta2_grad = tr_2 / m + lambda * Theta2_no_bias;
 
 % -------------------------------------------------------------
 
