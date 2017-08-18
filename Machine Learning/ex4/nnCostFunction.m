@@ -94,11 +94,11 @@ for j=1:m,
 end
 
 
-% Theta1_grad = tr_1 / m + lambda * Theta1_no_bias;
-Theta1_grad = delta_1 / m;
+Theta1_grad = delta_1 / m + lambda * Theta1_no_bias / m;
+% Theta1_grad = delta_1 / m;
 
-% Theta2_grad = tr_2 / m + lambda * Theta2_no_bias;
-Theta2_grad = delta_2 / m;
+Theta2_grad = delta_2 / m + lambda * Theta2_no_bias / m;
+% Theta2_grad = delta_2 / m;
 
 
 % -------------------------------------------------------------
