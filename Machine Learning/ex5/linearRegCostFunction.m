@@ -22,7 +22,7 @@ theta_no_bias = [0; theta(2:end)];
 
 J = (h - y)' * (h - y) / (2 * m) + lambda * theta_no_bias' * theta_no_bias / (2 * m);
 
-% grad = X' * (h - y) / m + theta_no_bias * lambda / m;
+grad = X' * (h - y) / m + theta_no_bias * lambda / m;
 
 
 
