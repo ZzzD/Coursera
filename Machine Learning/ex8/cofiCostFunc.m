@@ -42,7 +42,7 @@ Theta_grad = zeros(size(Theta));
 
 div = (X * Theta' .* R - Y);
 
-J =  sum(sum(div .^ 2), 2) / 2;
+J =  sum(sum(div .^ 2), 2) / 2 + lambda * sum(sum(Theta .^ 2), 2) / 2 + lambda *sum(sum(X .^ 2), 2) / 2;
 
 
 % for i = 1:num_movies,
