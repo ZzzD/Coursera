@@ -44,16 +44,10 @@ div = (X * Theta' .* R - Y);
 
 J =  sum(sum(div .^ 2), 2) / 2 + lambda * sum(sum(Theta .^ 2), 2) / 2 + lambda *sum(sum(X .^ 2), 2) / 2;
 
+X_grad = div * Theta + lambda * X;
 
-% for i = 1:num_movies,
-	% idx = find(R(i, :)==1;
-	% Thetatemp = Theta(idx, :);
-	% Ytemp = Y(i, idx);
-	% X_grad(i, :) = (X(i, :) ∗ ThetaTtemp − Ytemp) ∗ Thetatemp;
-X_grad = div * Theta;
-% end	
 
-Theta_grad = div' * X;
+Theta_grad = div' * X + lambda * Theta;
 
 
 
